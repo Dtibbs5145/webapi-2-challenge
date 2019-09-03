@@ -53,5 +53,35 @@ server.post('/api/posts', async (req, res) => {
     }
 });
 
+server.post('/api/posts/:id/comments', async (req, res) => {
+    try {
+        const post = await db.insertComment(req.body);
+        if (post) {
+            res.status(201).json({ message: 'Posted successfully' });
+        } else {
+            res.status(400).json({ message: 'Could not post' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'There was an error adding comment' })
+    }
+});
+
+server.put('/api/posts/:id', async (req, res) => {
+    try {
+        const post = db.update(req.params.id, req.body);
+        if (!req.params.id) {
+            res.status(400).json({ message: 'Provide content for post' });
+        } if (post) {
+            res.status(200).json({ message: 'Post was updated!' });
+        } else {
+            res.status(404).json({ message: 'Post could not be found' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'There was an error updating the post' });
+    }
+});
+
 const port = 5000;
 server.listen(port, () => console.log(`API running on ${port}`));
