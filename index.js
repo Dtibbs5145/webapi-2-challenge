@@ -69,7 +69,7 @@ server.post('/api/posts/:id/comments', async (req, res) => {
 
 server.put('/api/posts/:id', async (req, res) => {
     try {
-        const post = db.update(req.params.id, req.body);
+        const post = await db.update(req.params.id, req.body);
         if (!req.params.id) {
             res.status(400).json({ message: 'Provide content for post' });
         } if (post) {
